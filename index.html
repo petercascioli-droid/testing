@@ -308,6 +308,7 @@
             document.getElementById(`qty-${key}`).innerText = 0;
           }
           updateTotal();
+          
         } else {
           statusText.style.color = '#ef4444';
           statusText.innerText = '❌ Error: ' + data.message;
@@ -315,6 +316,13 @@
       } catch (err) {
         statusText.style.color = '#ef4444';
         statusText.innerText = '❌ Connection error. Please try again.';
+        if (data.success) {
+  // Redirect to Page 2 after submission
+  window.location.href = "success.html";
+} else {
+  statusText.style.color = '#ef4444';
+  statusText.innerText = '❌ Error: ' + data.message;
+}
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerText = 'Send Order via Email';
