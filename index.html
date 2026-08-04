@@ -5,80 +5,411 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studio Architettura & Design — Roma</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: #0b0f17; color: #e2e8f0; display: flex; justify-content: center; padding: 20px 15px; }
-        .portfolio-card { width: 100%; max-width: 440px; background: #111827; border-radius: 20px; padding: 28px 22px; border: 1px solid #1f2937; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
-        
-        .brand-header { text-align: left; margin-bottom: 24px; border-bottom: 1px solid #1f2937; padding-bottom: 18px; }
-        .tag { color: #93c5fd; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 8px; }
-        h1 { font-size: 1.75rem; font-weight: 300; color: #f8fafc; letter-spacing: -0.5px; }
-        h1 strong { font-weight: 700; color: #ffffff; }
-        p.sub { color: #94a3b8; font-size: 0.9rem; margin-top: 6px; line-height: 1.4; }
+        :root {
+            --bg-color: #f4f1eb;
+            --text-main: #1c1917;
+            --text-muted: #78716c;
+            --accent: #292524;
+            --surface: #ffffff;
+            --border: #e7e5e4;
+        }
 
-        .section-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; margin: 22px 0 12px 0; }
-        
-        .service-card { background: #1a2234; border-radius: 12px; padding: 16px; margin-bottom: 10px; border: 1px solid #26334d; }
-        .service-card h3 { font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 4px; }
-        .service-card p { font-size: 0.85rem; color: #94a3b8; line-height: 1.3; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .stat-box { background: #161e2e; border-radius: 12px; padding: 12px; text-align: center; border: 1px solid #232f48; }
-        .stat-number { font-size: 1.3rem; font-weight: 700; color: #38bdf8; }
-        .stat-label { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
 
-        .cta-box { display: flex; flex-direction: column; gap: 12px; margin-top: 26px; }
-        .btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; border-radius: 12px; font-weight: 600; text-decoration: none; font-size: 0.95rem; transition: all 0.2s ease; }
-        .btn-primary { background: #2563eb; color: #ffffff; }
-        .btn-whatsapp { background: #10b981; color: #ffffff; }
-        
-        .footer { text-align: center; margin-top: 22px; font-size: 0.75rem; color: #475569; }
+        .mobile-viewport {
+            width: 100%;
+            max-width: 430px;
+            background-color: var(--bg-color);
+            position: relative;
+            padding: 24px 20px 40px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER & NAVIGATION */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(41, 37, 36, 0.15);
+            margin-bottom: 35px;
+        }
+
+        .brand-logo {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .hamburger-menu {
+            width: 28px;
+            height: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        /* DRAWER MENU (OFF-CANVAS) */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 90;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 320px;
+            height: 100%;
+            background-color: #1c1917;
+            color: #f4f1eb;
+            z-index: 100;
+            padding: 40px 30px;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .drawer.open { right: 0; }
+        .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .drawer-close {
+            align-self: flex-end;
+            font-size: 1.8rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .drawer-nav {
+            list-style: none;
+            margin-top: 40px;
+        }
+
+        .drawer-nav li {
+            margin-bottom: 25px;
+        }
+
+        .drawer-nav a {
+            color: #f4f1eb;
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            margin-bottom: 40px;
+        }
+
+        .hero-subtitle {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            line-height: 1.15;
+            letter-spacing: -0.5px;
+            margin-bottom: 18px;
+        }
+
+        .hero-title span {
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        .hero-desc {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+
+        /* FEATURED IMAGE PLACEHOLDER (ARCHITECTURAL STYLE) */
+        .arch-image-frame {
+            width: 100%;
+            height: 220px;
+            background-color: #e2dfd7;
+            background-image: linear-gradient(135deg, #e7e4dc 25%, transparent 25%), linear-gradient(225deg, #e7e4dc 25%, transparent 25%), linear-gradient(45deg, #e7e4dc 25%, transparent 25%), linear-gradient(315deg, #e7e4dc 25%, #d8d4ca 25%);
+            background-position: 10px 0, 10px 0, 0 0, 0 0;
+            background-size: 20px 20px;
+            background-repeat: repeat;
+            border-radius: 4px;
+            margin-bottom: 35px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 16px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .image-caption {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(5px);
+            padding: 8px 14px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* ACCORDION / SCOPRI DI PIÙ SECTION */
+        .section-header {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--text-main);
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 10px;
+        }
+
+        .accordion-trigger {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 16px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            padding-bottom: 0;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 150px;
+            padding-bottom: 16px;
+        }
+
+        .accordion-item.active .icon {
+            transform: rotate(45deg);
+        }
+
+        .icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* ELEGANT INTEGRATED ACTIONS */
+        .actions-container {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-arch {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 22px;
+            background-color: var(--surface);
+            color: var(--text-main);
+            text-decoration: none;
+            border: 1px solid var(--text-main);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .btn-arch.primary {
+            background-color: var(--text-main);
+            color: var(--bg-color);
+        }
+
+        .btn-arch:active {
+            opacity: 0.85;
+            transform: scale(0.99);
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
 
-<div class="portfolio-card">
-    <div class="brand-header">
-        <span class="tag">Studio Architettura & Interior</span>
-        <h1>Arch. <strong>[Nome Cognome]</strong></h1>
-        <p class="sub">Progettazione d'interni, ristrutturazioni residenziali e pratiche edilizie a Roma.</p>
-    </div>
-
-    <div class="stats-grid">
-        <div class="stat-box">
-            <div class="stat-number">10+ Anni</div>
-            <div class="stat-label">Di Esperienza</div>
+<div class="mobile-viewport">
+    
+    <!-- HEADER -->
+    <header>
+        <div class="brand-logo">STUDIO STUDIO</div>
+        <div class="hamburger-menu" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-        <div class="stat-box">
-            <div class="stat-number">Roma & Prov.</div>
-            <div class="stat-label">Area Operativa</div>
+    </header>
+
+    <!-- DRAWER MENU -->
+    <div class="drawer-overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="drawer" id="drawer">
+        <div>
+            <div class="drawer-close" onclick="toggleMenu()">&times;</div>
+            <ul class="drawer-nav">
+                <li><a href="#progetti" onclick="toggleMenu()">Progetti</a></li>
+                <li><a href="#filosofia" onclick="toggleMenu()">Filosofia</a></li>
+                <li><a href="#servizi" onclick="toggleMenu()">Servizi</a></li>
+                <li><a href="#contatti" onclick="toggleMenu()">Contatti</a></li>
+            </ul>
+        </div>
+        <div style="font-size: 0.75rem; color: #a8a29e; letter-spacing: 1px;">
+            ROMA — VIA PRATI 42<br>© 2026 STUDIO ARCHITETTURA
         </div>
     </div>
 
-    <div class="section-title">Servizi Principali</div>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-subtitle">Architettura & Interior Design</div>
+        <h1 class="hero-title">Spazi pensati per <span>durare</span> nel tempo.</h1>
+        <p class="hero-desc">Progettazione d'interni, ristrutturazioni residenziali di alto profilo e consulenza chiavi in mano nel cuore di Roma.</p>
+    </section>
 
-    <div class="service-card">
-        <h3>🏛️ Restyling & Interior Design</h3>
-        <p>Ottimizzazione degli spazi, scelta dei materiali e modellazione 3D per appartamenti e locali.</p>
+    <!-- ARCHITECTURAL IMAGE PLACEHOLDER -->
+    <div class="arch-image-frame">
+        <div class="image-caption">Attico Parioli — 2026</div>
     </div>
 
-    <div class="service-card">
-        <h3>📋 Pratiche Edilizie (CILA, SCIA)</h3>
-        <p>Gestione burocratica completa per ristrutturazioni e variazioni catastali.</p>
+    <!-- SCOPRI DI PIÙ / ACCORDION -->
+    <div class="section-header">Servizi & Approccio</div>
+
+    <div class="accordion-item">
+        <button class="accordion-trigger" onclick="toggleAccordion(this)">
+            <span>Interior Design & Restyling</span>
+            <span class="icon">+</span>
+        </button>
+        <div class="accordion-content">
+            Studio approfondito di luce, materiali ed ergonomia. Trasformiamo appartamenti storici e moderni in residenze sartoriali.
+        </div>
     </div>
 
-    <div class="cta-box">
-        <a href="https://wa.me/390000000000?text=Buongiorno%20Architetto,%20vorrei%20richiedere%20informazioni%20per%20un%20sopralluogo." class="btn btn-whatsapp">
-            💬 Richiedi Sopralluogo su WhatsApp
+    <div class="accordion-item">
+        <button class="accordion-trigger" onclick="toggleAccordion(this)">
+            <span>Pratiche Edilizie & CILA/SCIA</span>
+            <span class="icon">+</span>
+        </button>
+        <div class="accordion-content">
+            Gestione burocratica completa a Roma, pratiche catastali e direzione lavori sul cantiere senza stress per il committente.
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <button class="accordion-trigger" onclick="toggleAccordion(this)">
+            <span>Consulenza & Sopralluogo</span>
+            <span class="icon">+</span>
+        </button>
+        <div class="accordion-content">
+            Analisi preliminare dell'immobile prima dell'acquisto o della ristrutturazione per valutarne potenzialità e costi stimati.
+        </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions-container" id="contatti">
+        <a href="https://wa.me/390000000000?text=Buongiorno,%20vorrei%20informazioni%20per%20un%20sopralluogo" class="btn-arch primary">
+            <span>Richiedi Sopralluogo</span>
+            <span>→</span>
         </a>
-        <a href="tel:+390000000000" class="btn btn-primary">
-            📞 Contatta lo Studio
+        <a href="tel:+390000000000" class="btn-arch">
+            <span>Chiama lo Studio</span>
+            <span>📞</span>
         </a>
     </div>
 
-    <div class="footer">
-        <p>Sito mobile portfolio per liberi professionisti</p>
-    </div>
+    <footer>
+        ROMA — ARCHITETTURA E DESIGN
+    </footer>
+
 </div>
+
+<script>
+    function toggleMenu() {
+        document.getElementById('drawer').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('open');
+    }
+
+    function toggleAccordion(button) {
+        const item = button.parentElement;
+        const isActive = item.classList.contains('active');
+        
+        // Chiudi tutti
+        document.querySelectorAll('.accordion-item').forEach(el => {
+            el.classList.remove('active');
+        });
+
+        // Se non era attivo, apri
+        if (!isActive) {
+            item.classList.add('active');
+        }
+    }
+</script>
 
 </body>
 </html>
