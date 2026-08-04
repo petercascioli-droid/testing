@@ -149,10 +149,7 @@
     <h2>Place Your Order</h2>
 
     <form id="orderForm">
-      <!-- PASTE YOUR WEB3FORMS ACCESS KEY HERE -->
       <input type="hidden" name="access_key" value="18ed4c2a-81e4-41cc-bb27-5538edf2f9ea">
-      
-      <!-- Hidden input to send formatted summary to your email -->
       <input type="hidden" id="order_summary" name="Order_Summary" value="">
       <input type="hidden" id="total_price_input" name="Total_Price" value="€0.00">
 
@@ -299,16 +296,8 @@
         const data = await response.json();
 
         if (data.success) {
-          statusText.style.color = '#10b981';
-          statusText.innerText = '✅ Order sent successfully! Check your inbox.';
-          orderForm.reset();
-          // Reset cart quantities
-          for (const key in cart) {
-            cart[key].qty = 0;
-            document.getElementById(`qty-${key}`).innerText = 0;
-          }
-          updateTotal();
-          
+          // Redirect to success page on submission
+          window.location.href = "success.html";
         } else {
           statusText.style.color = '#ef4444';
           statusText.innerText = '❌ Error: ' + data.message;
@@ -316,13 +305,6 @@
       } catch (err) {
         statusText.style.color = '#ef4444';
         statusText.innerText = '❌ Connection error. Please try again.';
-        if (data.success) {
-  // Redirect to Page 2 after submission
-  window.location.href = "success.html";
-} else {
-  statusText.style.color = '#ef4444';
-  statusText.innerText = '❌ Error: ' + data.message;
-}
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerText = 'Send Order via Email';
