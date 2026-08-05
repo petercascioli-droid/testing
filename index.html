@@ -9,9 +9,10 @@
             --bg-color: #f4f1eb;
             --text-main: #1c1917;
             --text-muted: #78716c;
-            --accent: #292524;
-            --surface: #ffffff;
+            --surface: rgba(255, 255, 255, 0.85);
             --border: #e7e5e4;
+            --shadow-soft: 0 10px 30px -5px rgba(28, 25, 23, 0.08);
+            --shadow-hard: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
         }
 
         * {
@@ -28,19 +29,46 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* HARDWARE ACCELERATED TECH-DRAWING BACKGROUND WITH BLEND */
+        .tech-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            /* Griglia tecnica e blueprint pattern */
+            background-image: 
+                linear-gradient(rgba(28, 25, 23, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(28, 25, 23, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            /* Mask radiale per sfumare i bordi e fare il blend con lo sfondo */
+            mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+            -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
         }
 
         .mobile-viewport {
             width: 100%;
             max-width: 430px;
-            background-color: var(--bg-color);
+            background-color: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             position: relative;
             padding: 24px 20px 40px 20px;
             display: flex;
             flex-direction: column;
+            box-shadow: var(--shadow-hard);
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
         }
 
-        /* HEADER & NAVIGATION */
+        /* HEADER */
         header {
             display: flex;
             justify-content: space-between;
@@ -58,8 +86,10 @@
             color: var(--text-main);
             border: 1px dashed var(--text-muted);
             padding: 4px 8px;
+            background: #ffffff;
         }
 
+        /* HARDWARE ACCELERATED HAMBURGER MENU */
         .hamburger-menu {
             width: 28px;
             height: 18px;
@@ -67,6 +97,7 @@
             flex-direction: column;
             justify-content: space-between;
             cursor: pointer;
+            z-index: 101;
         }
 
         .hamburger-menu span {
@@ -76,24 +107,27 @@
             background-color: var(--text-main);
         }
 
-        /* DRAWER MENU (OFF-CANVAS) */
+        /* DRAWER MENU (GPU ACCELERATED SLIDE) */
         .drawer-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 90;
+            transform: translate3d(0, 0, 0);
+            will-change: opacity;
         }
 
         .drawer {
             position: fixed;
             top: 0;
-            right: -100%;
+            right: 0;
             width: 80%;
             max-width: 320px;
             height: 100%;
@@ -101,14 +135,25 @@
             color: #f4f1eb;
             z-index: 100;
             padding: 40px 30px;
-            transition: right 0.3s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+            
+            /* Fast GPU Animations */
+            transform: translate3d(100%, 0, 0);
+            will-change: transform;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            backface-visibility: hidden;
         }
 
-        .drawer.open { right: 0; }
-        .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+        .drawer.open {
+            transform: translate3d(0, 0, 0);
+        }
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
         .drawer-close {
             align-self: flex-end;
@@ -132,6 +177,11 @@
             font-size: 1.25rem;
             font-weight: 300;
             letter-spacing: 1px;
+            transition: opacity 0.2s;
+        }
+
+        .drawer-nav a:active {
+            opacity: 0.6;
         }
 
         /* HERO SECTION */
@@ -169,25 +219,27 @@
             font-weight: 400;
         }
 
-        /* FEATURED IMAGE PLACEHOLDER */
+        /* FEATURED IMAGE FRAME WITH TECHNICAL DESIGN BACKGROUND */
         .arch-image-frame {
             width: 100%;
             height: 220px;
-            background-color: #e2dfd7;
-            background-image: linear-gradient(135deg, #e7e4dc 25%, transparent 25%), linear-gradient(225deg, #e7e4dc 25%, transparent 25%), linear-gradient(45deg, #e7e4dc 25%, transparent 25%), linear-gradient(315deg, #e7e4dc 25%, #d8d4ca 25%);
-            background-position: 10px 0, 10px 0, 0 0, 0 0;
-            background-size: 20px 20px;
-            border-radius: 4px;
+            background-color: #292524;
+            /* Immagine di sfondo blueprint/disegno tecnico */
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 16px 16px;
+            border-radius: 8px;
             margin-bottom: 35px;
             position: relative;
             display: flex;
             align-items: flex-end;
             padding: 16px;
-            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
         }
 
         .image-caption {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(5px);
             padding: 8px 14px;
             font-size: 0.75rem;
@@ -195,9 +247,10 @@
             text-transform: uppercase;
             font-weight: 600;
             color: var(--text-main);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        /* ACCORDION / SCOPRI DI PIÙ */
+        /* ACCORDION */
         .section-header {
             font-size: 0.8rem;
             text-transform: uppercase;
@@ -231,15 +284,17 @@
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease;
+            transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             font-size: 0.9rem;
             line-height: 1.5;
             color: var(--text-muted);
             padding-bottom: 0;
+            transform: translate3d(0, 0, 0);
+            will-change: max-height;
         }
 
         .accordion-item.active .accordion-content {
-            max-height: 150px;
+            max-height: 160px;
             padding-bottom: 16px;
         }
 
@@ -252,7 +307,7 @@
             transition: transform 0.3s ease;
         }
 
-        /* ELEGANT ACTIONS */
+        /* ACTIONS */
         .actions-container {
             margin-top: 40px;
             display: flex;
@@ -265,7 +320,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 18px 22px;
-            background-color: var(--surface);
+            background-color: #ffffff;
             color: var(--text-main);
             text-decoration: none;
             border: 1px solid var(--text-main);
@@ -273,7 +328,14 @@
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            transition: all 0.2s ease;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transform: translate3d(0,0,0);
+        }
+
+        .btn-arch:active {
+            transform: translate3d(0, 2px, 0);
+            box-shadow: none;
         }
 
         .btn-arch.primary {
@@ -292,6 +354,9 @@
 </head>
 <body>
 
+<!-- TECHNICAL DRAWING BACKGROUND PATTERN WITH FADE BLEND -->
+<div class="tech-bg"></div>
+
 <div class="mobile-viewport">
     
     <!-- HEADER -->
@@ -304,20 +369,21 @@
         </div>
     </header>
 
-    <!-- DRAWER MENU -->
+    <!-- DRAWER MENU REAL LINK NAVIGATION -->
     <div class="drawer-overlay" id="overlay" onclick="toggleMenu()"></div>
     <div class="drawer" id="drawer">
         <div>
             <div class="drawer-close" onclick="toggleMenu()">&times;</div>
             <ul class="drawer-nav">
-                <li><a href="#progetti" onclick="toggleMenu()">Progetti</a></li>
-                <li><a href="#servizi" onclick="toggleMenu()">Servizi</a></li>
-                <li><a href="#studio" onclick="toggleMenu()">Lo Studio</a></li>
-                <li><a href="#contatti" onclick="toggleMenu()">Contatti</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="progetti.html">Progetti</a></li>
+                <li><a href="servizi.html">Servizi</a></li>
+                <li><a href="studio.html">Lo Studio</a></li>
+                <li><a href="contatti.html">Contatti</a></li>
             </ul>
         </div>
         <div style="font-size: 0.75rem; color: #a8a29e; letter-spacing: 1px;">
-            [INSERISCI INDIRIZZO / CITTA]<br>© DEMO LAYOUT PER ARCHITETTI
+            [INSERISCI INDIRIZZO / CITTÀ]<br>© DEMO LAYOUT PER ARCHITETTI
         </div>
     </div>
 
@@ -328,12 +394,12 @@
         <p class="hero-desc">Progettazione d'interni, ristrutturazioni residenziali e gestione pratiche edilizie. Anteprima del tuo nuovo sito web mobile.</p>
     </section>
 
-    <!-- ARCHITECTURAL IMAGE PLACEHOLDER -->
+    <!-- ARCHITECTURAL IMAGE FRAME -->
     <div class="arch-image-frame">
         <div class="image-caption">[PROGETTO IN EVIDENZA]</div>
     </div>
 
-    <!-- SCOPRI DI PIÙ / ACCORDION -->
+    <!-- SCOPRI DI PIÙ ACCORDION -->
     <div class="section-header">Servizi dello Studio</div>
 
     <div class="accordion-item">
@@ -367,12 +433,12 @@
     </div>
 
     <!-- ACTIONS -->
-    <div class="actions-container" id="contatti">
+    <div class="actions-container">
         <a href="https://wa.me/390000000000?text=Buongiorno,%20vorrei%20richiedere%20informazioni" class="btn-arch primary">
             <span>Richiedi Sopralluogo</span>
             <span>→</span>
         </a>
-        <a href="tel:+390000000000" class="btn-arch">
+        <a href="contatti.html" class="btn-arch">
             <span>Contatta lo Studio</span>
             <span>📞</span>
         </a>
