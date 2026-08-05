@@ -1,34 +1,122 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servizi — Demo Studio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Servizi — Demo Studio Architettura</title>
     <style>
-        body { background:#f4f1eb; font-family: -apple-system, sans-serif; display:flex; justify-content:center; padding:20px; }
-        .box { width:100%; max-width:430px; background:rgba(255,255,255,0.9); padding:25px; border-radius:12px; border:1px solid #e7e5e4; }
-        h1 { font-weight:300; margin-bottom:15px; }
-        .item { border-bottom:1px solid #e7e5e4; padding:15px 0; }
-        .item h3 { font-size:1rem; margin-bottom:5px; }
-        .item p { font-size:0.85rem; color:#78716c; }
-        a.back { display:inline-block; margin-top:20px; color:#1c1917; font-weight:bold; text-decoration:none; }
+        :root {
+            --bg-color: #e2dfd7;
+            --text-main: #1c1917;
+            --text-muted: #625d59;
+            --surface: rgba(248, 246, 242, 0.94);
+            --border: #d6d3d1;
+            --shadow-hard: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-vignette: inset 0 0 80px rgba(28, 25, 23, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+        html, body { width: 100%; min-height: 100vh; background-color: var(--bg-color); overflow-y: auto; overflow-x: hidden; }
+        body { color: var(--text-main); display: flex; justify-content: center; position: relative; }
+
+        .arch-stock-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background-image: radial-gradient(circle at center, rgba(226, 223, 215, 0.2) 0%, rgba(28, 25, 23, 0.55) 100%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23292524' stroke-width='1' stroke-opacity='0.18'%3E%3Cpath d='M100 100h600v600H100zM100 100l600 600M700 100L100 700'/%3E%3Cpath d='M200 200h400v400H200zM200 200l400 400M600 200L200 600'/%3E%3Ccircle cx='400' cy='400' r='300'/%3E%3Ccircle cx='400' cy='400' r='150'/%3E%3Cpath d='M50 400h700M400 50v700M150 150l500 500'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: cover; background-position: center;
+        }
+
+        .bg-overlay-shadow {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background: linear-gradient(180deg, rgba(226,223,215,0.85) 0%, rgba(226,223,215,0.4) 50%, rgba(226,223,215,0.9) 100%);
+            backdrop-filter: blur(2px);
+        }
+
+        .mobile-viewport {
+            width: 100%; max-width: 430px; background-color: var(--surface);
+            backdrop-filter: blur(16px); padding: 24px 20px 40px 20px; display: flex; flex-direction: column;
+            box-shadow: var(--shadow-hard), var(--shadow-vignette); min-height: 100vh;
+        }
+
+        header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid rgba(41, 37, 36, 0.15); margin-bottom: 35px; }
+        .brand-logo { font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-main); border: 1px dashed var(--text-muted); padding: 4px 8px; background: #ffffff; text-decoration: none; }
+
+        .hamburger-menu { width: 28px; height: 18px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; z-index: 110; }
+        .hamburger-menu span { display: block; width: 100%; height: 2px; background-color: var(--text-main); }
+
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.3s, visibility 0.3s; z-index: 99; }
+        .drawer { position: fixed; top: 0; right: 0; width: 80%; max-width: 320px; height: 100%; background-color: #1c1917; color: #f4f1eb; z-index: 100; padding: 40px 30px; display: flex; flex-direction: column; justify-content: space-between; transform: translate3d(100%, 0, 0); visibility: hidden; transition: transform 0.35s, visibility 0.35s; }
+        .drawer.open { transform: translate3d(0, 0, 0); visibility: visible; }
+        .drawer-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
+        .drawer-close { align-self: flex-end; font-size: 1.8rem; cursor: pointer; padding: 10px; }
+        .drawer-nav { list-style: none; margin-top: 30px; }
+        .drawer-nav li { margin-bottom: 25px; }
+        .drawer-nav a { color: #f4f1eb; text-decoration: none; font-size: 1.25rem; font-weight: 300; }
+
+        .page-title { font-size: 1.8rem; font-weight: 300; margin-bottom: 8px; }
+        .page-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 30px; }
+
+        .service-box { border-bottom: 1px solid var(--border); padding: 20px 0; }
+        .service-box h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+        .service-box p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+
+        footer { margin-top: auto; padding-top: 40px; text-align: center; font-size: 0.75rem; color: var(--text-muted); }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>[SERVIZI EDILIZI]</h1>
-        <div class="item">
-            <h3>📋 CILA / SCIA / Permessi di Costruire</h3>
-            <p>Pratiche burocratiche per l'inizio dei lavori presso il Comune di Roma.</p>
+
+<div class="arch-stock-bg"></div>
+<div class="bg-overlay-shadow"></div>
+
+<div class="mobile-viewport">
+    <header>
+        <a href="index.html" class="brand-logo">[LOGO STUDIO]</a>
+        <div class="hamburger-menu" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
         </div>
-        <div class="item">
-            <h3>📐 Variazioni Catastali & DOCFA</h3>
-            <p>Aggiornamento planimetrico all'Agenzia delle Entrate post-lavori.</p>
+    </header>
+
+    <div class="drawer-overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="drawer" id="drawer">
+        <div>
+            <div class="drawer-close" onclick="toggleMenu()">&times;</div>
+            <ul class="drawer-nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="progetti.html">Progetti</a></li>
+                <li><a href="servizi.html">Servizi</a></li>
+                <li><a href="studio.html">Lo Studio</a></li>
+                <li><a href="contatti.html">Contatti</a></li>
+            </ul>
         </div>
-        <div class="item">
-            <h3>🏗️ Direzione Lavori & Sicurezza</h3>
-            <p>Supervisione completa in cantiere e gestione maestranze.</p>
-        </div>
-        <a href="index.html" class="back">← Torna alla Home</a>
+        <div style="font-size: 0.75rem; color: #a8a29e;">[INSERISCI INDIRIZZO]<br>© DEMO LAYOUT FOR ARCHITECTS</div>
     </div>
+
+    <h1 class="page-title">Servizi Offerit</h1>
+    <p class="page-desc">Supporto tecnico completo dalla fase preliminare al cantiere.</p>
+
+    <div class="service-box">
+        <h3>📋 Pratiche Edilizie (CILA, SCIA, PdC)</h3>
+        <p>Presentazione e gestione di tutte le autorizzazioni amministrative necessarie per avviare la ristrutturazione nel Comune di Roma.</p>
+    </div>
+
+    <div class="service-box">
+        <h3>📐 Aggiornamenti Catastali</h3>
+        <p>Variazioni planimetriche, visure e pratiche DOCFA all'Agenzia delle Entrate per la conformità dell'immobile.</p>
+    </div>
+
+    <div class="service-box">
+        <h3>🏗️ Direzione Lavori & Cantieri</h3>
+        <p>Supervisione costante dei lavori, verifica dei costi e coordinamento con le imprese sul posto.</p>
+    </div>
+
+    <footer>LAYOUT DEMO OTTIMIZZATO PER SMARTPHONE</footer>
+</div>
+
+<script>
+    function toggleMenu() {
+        document.getElementById('drawer').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('open');
+    }
+</script>
 </body>
 </html>
