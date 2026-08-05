@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio Architettura & Design — Roma</title>
+    <title>Demo Portfolio Architettura & Design</title>
     <style>
         :root {
             --bg-color: #f4f1eb;
@@ -51,11 +51,13 @@
         }
 
         .brand-logo {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--text-main);
+            border: 1px dashed var(--text-muted);
+            padding: 4px 8px;
         }
 
         .hamburger-menu {
@@ -72,7 +74,6 @@
             width: 100%;
             height: 2px;
             background-color: var(--text-main);
-            transition: all 0.3s ease;
         }
 
         /* DRAWER MENU (OFF-CANVAS) */
@@ -148,7 +149,7 @@
         }
 
         .hero-title {
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             font-weight: 300;
             line-height: 1.15;
             letter-spacing: -0.5px;
@@ -168,7 +169,7 @@
             font-weight: 400;
         }
 
-        /* FEATURED IMAGE PLACEHOLDER (ARCHITECTURAL STYLE) */
+        /* FEATURED IMAGE PLACEHOLDER */
         .arch-image-frame {
             width: 100%;
             height: 220px;
@@ -176,7 +177,6 @@
             background-image: linear-gradient(135deg, #e7e4dc 25%, transparent 25%), linear-gradient(225deg, #e7e4dc 25%, transparent 25%), linear-gradient(45deg, #e7e4dc 25%, transparent 25%), linear-gradient(315deg, #e7e4dc 25%, #d8d4ca 25%);
             background-position: 10px 0, 10px 0, 0 0, 0 0;
             background-size: 20px 20px;
-            background-repeat: repeat;
             border-radius: 4px;
             margin-bottom: 35px;
             position: relative;
@@ -197,7 +197,7 @@
             color: var(--text-main);
         }
 
-        /* ACCORDION / SCOPRI DI PIÙ SECTION */
+        /* ACCORDION / SCOPRI DI PIÙ */
         .section-header {
             font-size: 0.8rem;
             text-transform: uppercase;
@@ -252,7 +252,7 @@
             transition: transform 0.3s ease;
         }
 
-        /* ELEGANT INTEGRATED ACTIONS */
+        /* ELEGANT ACTIONS */
         .actions-container {
             margin-top: 40px;
             display: flex;
@@ -269,7 +269,7 @@
             color: var(--text-main);
             text-decoration: none;
             border: 1px solid var(--text-main);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -279,11 +279,6 @@
         .btn-arch.primary {
             background-color: var(--text-main);
             color: var(--bg-color);
-        }
-
-        .btn-arch:active {
-            opacity: 0.85;
-            transform: scale(0.99);
         }
 
         footer {
@@ -301,7 +296,7 @@
     
     <!-- HEADER -->
     <header>
-        <div class="brand-logo">STUDIO STUDIO</div>
+        <div class="brand-logo">[LOGO STUDIO]</div>
         <div class="hamburger-menu" onclick="toggleMenu()">
             <span></span>
             <span></span>
@@ -316,13 +311,13 @@
             <div class="drawer-close" onclick="toggleMenu()">&times;</div>
             <ul class="drawer-nav">
                 <li><a href="#progetti" onclick="toggleMenu()">Progetti</a></li>
-                <li><a href="#filosofia" onclick="toggleMenu()">Filosofia</a></li>
                 <li><a href="#servizi" onclick="toggleMenu()">Servizi</a></li>
+                <li><a href="#studio" onclick="toggleMenu()">Lo Studio</a></li>
                 <li><a href="#contatti" onclick="toggleMenu()">Contatti</a></li>
             </ul>
         </div>
         <div style="font-size: 0.75rem; color: #a8a29e; letter-spacing: 1px;">
-            ROMA — VIA PRATI 42<br>© 2026 STUDIO ARCHITETTURA
+            [INSERISCI INDIRIZZO / CITTA]<br>© DEMO LAYOUT PER ARCHITETTI
         </div>
     </div>
 
@@ -330,16 +325,16 @@
     <section class="hero">
         <div class="hero-subtitle">Architettura & Interior Design</div>
         <h1 class="hero-title">Spazi pensati per <span>durare</span> nel tempo.</h1>
-        <p class="hero-desc">Progettazione d'interni, ristrutturazioni residenziali di alto profilo e consulenza chiavi in mano nel cuore di Roma.</p>
+        <p class="hero-desc">Progettazione d'interni, ristrutturazioni residenziali e gestione pratiche edilizie. Anteprima del tuo nuovo sito web mobile.</p>
     </section>
 
     <!-- ARCHITECTURAL IMAGE PLACEHOLDER -->
     <div class="arch-image-frame">
-        <div class="image-caption">Attico Parioli — 2026</div>
+        <div class="image-caption">[PROGETTO IN EVIDENZA]</div>
     </div>
 
     <!-- SCOPRI DI PIÙ / ACCORDION -->
-    <div class="section-header">Servizi & Approccio</div>
+    <div class="section-header">Servizi dello Studio</div>
 
     <div class="accordion-item">
         <button class="accordion-trigger" onclick="toggleAccordion(this)">
@@ -347,44 +342,44 @@
             <span class="icon">+</span>
         </button>
         <div class="accordion-content">
-            Studio approfondito di luce, materiali ed ergonomia. Trasformiamo appartamenti storici e moderni in residenze sartoriali.
+            Studio illuminotecnico, selezione materiali e progettazione d'arredo su misura per valorizzare ogni ambiente residenziale o commerciale.
         </div>
     </div>
 
     <div class="accordion-item">
         <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span>Pratiche Edilizie & CILA/SCIA</span>
+            <span>Pratiche Edilizie & Catasto</span>
             <span class="icon">+</span>
         </button>
         <div class="accordion-content">
-            Gestione burocratica completa a Roma, pratiche catastali e direzione lavori sul cantiere senza stress per il committente.
+            Gestione completa di CILA, SCIA, variazioni catastali e adempimenti burocratici per ristrutturazioni senza intoppi.
         </div>
     </div>
 
     <div class="accordion-item">
         <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span>Consulenza & Sopralluogo</span>
+            <span>Direzione Lavori & Cantieri</span>
             <span class="icon">+</span>
         </button>
         <div class="accordion-content">
-            Analisi preliminare dell'immobile prima dell'acquisto o della ristrutturazione per valutarne potenzialità e costi stimati.
+            Coordinamento delle maestranze in cantiere, controllo tempistiche e gestione del budget di progetto chiavi in mano.
         </div>
     </div>
 
     <!-- ACTIONS -->
     <div class="actions-container" id="contatti">
-        <a href="https://wa.me/390000000000?text=Buongiorno,%20vorrei%20informazioni%20per%20un%20sopralluogo" class="btn-arch primary">
+        <a href="https://wa.me/390000000000?text=Buongiorno,%20vorrei%20richiedere%20informazioni" class="btn-arch primary">
             <span>Richiedi Sopralluogo</span>
             <span>→</span>
         </a>
         <a href="tel:+390000000000" class="btn-arch">
-            <span>Chiama lo Studio</span>
+            <span>Contatta lo Studio</span>
             <span>📞</span>
         </a>
     </div>
 
     <footer>
-        ROMA — ARCHITETTURA E DESIGN
+        LAYOUT DEMO OTTIMIZZATO PER SMARTPHONE
     </footer>
 
 </div>
@@ -399,12 +394,10 @@
         const item = button.parentElement;
         const isActive = item.classList.contains('active');
         
-        // Chiudi tutti
         document.querySelectorAll('.accordion-item').forEach(el => {
             el.classList.remove('active');
         });
 
-        // Se non era attivo, apri
         if (!isActive) {
             item.classList.add('active');
         }
