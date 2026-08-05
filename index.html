@@ -2,14 +2,15 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- BLOCCO ZOOM E RIDIMENSIONAMENTO PERFETTO MOBILE -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Demo Portfolio Architettura & Design</title>
     <style>
         :root {
             --bg-color: #f4f1eb;
             --text-main: #1c1917;
             --text-muted: #78716c;
-            --surface: rgba(255, 255, 255, 0.85);
+            --surface: rgba(255, 255, 255, 0.90);
             --border: #e7e5e4;
             --shadow-soft: 0 10px 30px -5px rgba(28, 25, 23, 0.08);
             --shadow-hard: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
@@ -21,6 +22,7 @@
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif;
             -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -33,7 +35,7 @@
             position: relative;
         }
 
-        /* HARDWARE ACCELERATED TECH-DRAWING BACKGROUND WITH BLEND */
+        /* BACKGROUND TECNICO CON BLEND RADIALE */
         .tech-bg {
             position: fixed;
             top: 0;
@@ -41,12 +43,10 @@
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            /* Griglia tecnica e blueprint pattern */
             background-image: 
                 linear-gradient(rgba(28, 25, 23, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(28, 25, 23, 0.05) 1px, transparent 1px);
             background-size: 20px 20px;
-            /* Mask radiale per sfumare i bordi e fare il blend con lo sfondo */
             mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
             -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
             transform: translate3d(0, 0, 0);
@@ -66,6 +66,7 @@
             box-shadow: var(--shadow-hard);
             transform: translate3d(0, 0, 0);
             will-change: transform;
+            min-height: 100vh;
         }
 
         /* HEADER */
@@ -89,7 +90,7 @@
             background: #ffffff;
         }
 
-        /* HARDWARE ACCELERATED HAMBURGER MENU */
+        /* HAMBURGER */
         .hamburger-menu {
             width: 28px;
             height: 18px;
@@ -97,7 +98,7 @@
             flex-direction: column;
             justify-content: space-between;
             cursor: pointer;
-            z-index: 101;
+            z-index: 110;
         }
 
         .hamburger-menu span {
@@ -107,7 +108,7 @@
             background-color: var(--text-main);
         }
 
-        /* DRAWER MENU (GPU ACCELERATED SLIDE) */
+        /* DRAWER FIX: NASCOSTO AL 100% QUANDO CHIUSO */
         .drawer-overlay {
             position: fixed;
             top: 0;
@@ -117,11 +118,11 @@
             background: rgba(0,0,0,0.5);
             backdrop-filter: blur(4px);
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 90;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+            z-index: 99;
             transform: translate3d(0, 0, 0);
-            will-change: opacity;
         }
 
         .drawer {
@@ -140,18 +141,22 @@
             justify-content: space-between;
             box-shadow: -10px 0 30px rgba(0,0,0,0.3);
             
-            /* Fast GPU Animations */
+            /* Stato chiuso: fuori schermo, invisibile e non cliccabile */
             transform: translate3d(100%, 0, 0);
-            will-change: transform;
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            visibility: hidden;
+            will-change: transform, visibility;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
             backface-visibility: hidden;
         }
 
+        /* STATO APERTO */
         .drawer.open {
             transform: translate3d(0, 0, 0);
+            visibility: visible;
         }
         .drawer-overlay.open {
             opacity: 1;
+            visibility: visible;
             pointer-events: auto;
         }
 
@@ -160,11 +165,12 @@
             font-size: 1.8rem;
             cursor: pointer;
             line-height: 1;
+            padding: 10px;
         }
 
         .drawer-nav {
             list-style: none;
-            margin-top: 40px;
+            margin-top: 30px;
         }
 
         .drawer-nav li {
@@ -177,11 +183,7 @@
             font-size: 1.25rem;
             font-weight: 300;
             letter-spacing: 1px;
-            transition: opacity 0.2s;
-        }
-
-        .drawer-nav a:active {
-            opacity: 0.6;
+            display: inline-block;
         }
 
         /* HERO SECTION */
@@ -219,12 +221,11 @@
             font-weight: 400;
         }
 
-        /* FEATURED IMAGE FRAME WITH TECHNICAL DESIGN BACKGROUND */
+        /* FRAME IMMAGINE */
         .arch-image-frame {
             width: 100%;
             height: 220px;
             background-color: #292524;
-            /* Immagine di sfondo blueprint/disegno tecnico */
             background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px);
             background-size: 16px 16px;
             border-radius: 8px;
@@ -290,7 +291,6 @@
             color: var(--text-muted);
             padding-bottom: 0;
             transform: translate3d(0, 0, 0);
-            will-change: max-height;
         }
 
         .accordion-item.active .accordion-content {
@@ -354,12 +354,10 @@
 </head>
 <body>
 
-<!-- TECHNICAL DRAWING BACKGROUND PATTERN WITH FADE BLEND -->
 <div class="tech-bg"></div>
 
 <div class="mobile-viewport">
     
-    <!-- HEADER -->
     <header>
         <div class="brand-logo">[LOGO STUDIO]</div>
         <div class="hamburger-menu" onclick="toggleMenu()">
@@ -369,7 +367,6 @@
         </div>
     </header>
 
-    <!-- DRAWER MENU REAL LINK NAVIGATION -->
     <div class="drawer-overlay" id="overlay" onclick="toggleMenu()"></div>
     <div class="drawer" id="drawer">
         <div>
@@ -387,19 +384,16 @@
         </div>
     </div>
 
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-subtitle">Architettura & Interior Design</div>
         <h1 class="hero-title">Spazi pensati per <span>durare</span> nel tempo.</h1>
         <p class="hero-desc">Progettazione d'interni, ristrutturazioni residenziali e gestione pratiche edilizie. Anteprima del tuo nuovo sito web mobile.</p>
     </section>
 
-    <!-- ARCHITECTURAL IMAGE FRAME -->
     <div class="arch-image-frame">
         <div class="image-caption">[PROGETTO IN EVIDENZA]</div>
     </div>
 
-    <!-- SCOPRI DI PIÙ ACCORDION -->
     <div class="section-header">Servizi dello Studio</div>
 
     <div class="accordion-item">
@@ -432,7 +426,6 @@
         </div>
     </div>
 
-    <!-- ACTIONS -->
     <div class="actions-container">
         <a href="https://wa.me/390000000000?text=Buongiorno,%20vorrei%20richiedere%20informazioni" class="btn-arch primary">
             <span>Richiedi Sopralluogo</span>
