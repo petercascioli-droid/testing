@@ -2,18 +2,18 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <!-- BLOCCO ZOOM E RIDIMENSIONAMENTO PERFETTO MOBILE -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- BLOCCA LO ZOOM E IL RESIZE SU MOBILE -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>Demo Portfolio Architettura & Design</title>
     <style>
         :root {
-            --bg-color: #f4f1eb;
+            --bg-color: #e2dfd7;
             --text-main: #1c1917;
-            --text-muted: #78716c;
-            --surface: rgba(255, 255, 255, 0.90);
-            --border: #e7e5e4;
-            --shadow-soft: 0 10px 30px -5px rgba(28, 25, 23, 0.08);
-            --shadow-hard: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+            --text-muted: #625d59;
+            --surface: rgba(248, 246, 242, 0.92);
+            --border: #d6d3d1;
+            --shadow-hard: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-vignette: inset 0 0 80px rgba(28, 25, 23, 0.15);
         }
 
         * {
@@ -23,50 +23,74 @@
             font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif;
             -webkit-font-smoothing: antialiased;
             -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation; /* Disabilita gesture complesse di zoom */
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: var(--bg-color);
         }
 
         body {
-            background-color: var(--bg-color);
             color: var(--text-main);
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            overflow-x: hidden;
             position: relative;
         }
 
-        /* BACKGROUND TECNICO CON BLEND RADIALE */
-        .tech-bg {
+        /* SFONDO STOCK/TECNICO ARCHITETTURALE BLENDATO CON OMBRE */
+        .arch-stock-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             z-index: -1;
+            /* Stock-photo architetturale vettoriale (Disegno prospettico/Blueprint) */
             background-image: 
-                linear-gradient(rgba(28, 25, 23, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(28, 25, 23, 0.05) 1px, transparent 1px);
-            background-size: 20px 20px;
-            mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
-            -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%);
+                /* VIGNETTATURA E OMBRA AI BORDI PER EFFETTO BLEND */
+                radial-gradient(circle at center, rgba(226, 223, 215, 0.2) 0%, rgba(28, 25, 23, 0.55) 100%),
+                /* DISEGNO TECNICO STOCK SOTTOSTANTE */
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23292524' stroke-width='1' stroke-opacity='0.18'%3E%3Cpath d='M100 100h600v600H100zM100 100l600 600M700 100L100 700'/%3E%3Cpath d='M200 200h400v400H200zM200 200l400 400M600 200L200 600'/%3E%3Ccircle cx='400' cy='400' r='300'/%3E%3Ccircle cx='400' cy='400' r='150'/%3E%3Cpath d='M50 400h700M400 50v700M150 150l500 500'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
             transform: translate3d(0, 0, 0);
             will-change: transform;
         }
 
+        /* MASH DI CORREZIONE LUMINOSITÀ E SFUMATURA MORBIDA */
+        .bg-overlay-shadow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(226,223,215,0.85) 0%, rgba(226,223,215,0.4) 50%, rgba(226,223,215,0.9) 100%);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+
+        /* CARD MOBILE PRINCIPALE */
         .mobile-viewport {
             width: 100%;
             max-width: 430px;
             background-color: var(--surface);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             position: relative;
             padding: 24px 20px 40px 20px;
             display: flex;
             flex-direction: column;
-            box-shadow: var(--shadow-hard);
+            box-shadow: var(--shadow-hard), var(--shadow-vignette);
             transform: translate3d(0, 0, 0);
             will-change: transform;
             min-height: 100vh;
+            border-left: 1px solid rgba(255,255,255,0.4);
+            border-right: 1px solid rgba(255,255,255,0.4);
         }
 
         /* HEADER */
@@ -90,7 +114,7 @@
             background: #ffffff;
         }
 
-        /* HAMBURGER */
+        /* HAMBURGER MENU */
         .hamburger-menu {
             width: 28px;
             height: 18px;
@@ -108,15 +132,16 @@
             background-color: var(--text-main);
         }
 
-        /* DRAWER FIX: NASCOSTO AL 100% QUANDO CHIUSO */
+        /* DRAWER MENU TOTALE FIX PER I BUG */
         .drawer-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -139,9 +164,8 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.4);
             
-            /* Stato chiuso: fuori schermo, invisibile e non cliccabile */
             transform: translate3d(100%, 0, 0);
             visibility: hidden;
             will-change: transform, visibility;
@@ -149,7 +173,6 @@
             backface-visibility: hidden;
         }
 
-        /* STATO APERTO */
         .drawer.open {
             transform: translate3d(0, 0, 0);
             visibility: visible;
@@ -221,12 +244,14 @@
             font-weight: 400;
         }
 
-        /* FRAME IMMAGINE */
+        /* FRAME IMMAGINE PLACEHOLDER */
         .arch-image-frame {
             width: 100%;
             height: 220px;
             background-color: #292524;
-            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-image: 
+                radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px), 
+                linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px);
             background-size: 16px 16px;
             border-radius: 8px;
             margin-bottom: 35px;
@@ -234,8 +259,8 @@
             display: flex;
             align-items: flex-end;
             padding: 16px;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 12px 24px -6px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
             overflow: hidden;
         }
 
@@ -328,7 +353,7 @@
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            box-shadow: var(--shadow-soft);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             transition: transform 0.15s ease, box-shadow 0.15s ease;
             transform: translate3d(0,0,0);
         }
@@ -340,7 +365,7 @@
 
         .btn-arch.primary {
             background-color: var(--text-main);
-            color: var(--bg-color);
+            color: #f4f1eb;
         }
 
         footer {
@@ -354,7 +379,9 @@
 </head>
 <body>
 
-<div class="tech-bg"></div>
+<!-- SFONDO STOCK/DISEGNO TECNICO CON SFUMATURE E OMBRE -->
+<div class="arch-stock-bg"></div>
+<div class="bg-overlay-shadow"></div>
 
 <div class="mobile-viewport">
     
@@ -444,11 +471,26 @@
 </div>
 
 <script>
+    // BLOCCA RIGIDAMENTE LO ZOOM PINCH-TO-ZOOM SU IOS SAFARI & CHROME
+    document.addEventListener('touchstart', function(event) {
+        if (event.touches.length > 1) {
+            event.preventDefault(); // Blocca il pinch con 2 dita
+        }
+    }, { passive: false });
+
+    document.addEventListener('touchmove', function(event) {
+        if (event.touches.length > 1) {
+            event.preventDefault(); // Blocca il dezoom durante il movimento
+        }
+    }, { passive: false });
+
+    // TOGGLE MENU
     function toggleMenu() {
         document.getElementById('drawer').classList.toggle('open');
         document.getElementById('overlay').classList.toggle('open');
     }
 
+    // ACCORDION
     function toggleAccordion(button) {
         const item = button.parentElement;
         const isActive = item.classList.contains('active');
